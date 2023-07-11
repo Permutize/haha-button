@@ -1,31 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { URI_AVAILABLE } from '@web3-react/walletconnect-v2'
-// import { MAINNET_CHAINS } from './chains'
 import { walletConnectV2, hooks } from './connector'
-// import { ConnectWithSelect } from './ConnectWithSelect'
-// const CHAIN_IDS = Object.keys(MAINNET_CHAINS).map(Number)
 
 const { useIsActive } = hooks
 
-// type HahaProps = {}
-
 export default function HahaModal() {
-  // const chainId = useChainId()
-  // const accounts = useAccounts()
-  // const isActivating = useIsActivating()
-
   const isActive = useIsActive()
-
-  // const provider = useProvider()
 
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false)
   const [wcUri, setWcUri] = useState<string>('')
-  // const [error, setError] = useState<Error | undefined>(undefined)
 
   // log URI when available
   useEffect(() => {
     walletConnectV2.events.on(URI_AVAILABLE, (uri: string) => {
-      console.log(`uri: ${uri}`)
       setWcUri(uri)
       setIsShowDialog(true)
     })
@@ -34,7 +21,7 @@ export default function HahaModal() {
   // attempt to connect eagerly on mount
   useEffect(() => {
     walletConnectV2.connectEagerly().catch((error) => {
-      console.debug('Failed to connect eagerly to walletconnect', error)
+      console.error('Failed to connect eagerly to walletconnect', error)
     })
   }, [])
 
@@ -44,35 +31,8 @@ export default function HahaModal() {
     }
   }, [isActive])
 
-  // useEffect(() => {
-  //   console.log({ accounts, provider })
-  //   if (accounts && provider && onConnect) {
-  //     onConnect(accounts, provider)
-  //   }
-  // }, [accounts, provider, onConnect])
-
   return (
     <>
-      {/* <div>
-                isActivating: {isActivating ? "true" : "false"}
-            </div>
-            <div>
-                isActive: {isActive ? "true" : "false"}
-            </div> */}
-      {/* <ConnectWithSelect
-        connector={walletConnectV2}
-        activeChainId={chainId}
-        chainIds={CHAIN_IDS}
-        isActivating={isActivating}
-        isActive={isActive}
-        error={error}
-        setError={setError}
-        style={style}
-        className={className}
-      >
-        {children}
-      </ConnectWithSelect> */}
-
       {isShowDialog && (
         <div style={styles.modalRoot}>
           <div style={styles.modalContent}>
