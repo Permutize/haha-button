@@ -5,10 +5,12 @@ import { WalletConnect as WalletConnectV2 } from '@web3-react/walletconnect-v2'
 export function ConnectWithSelect({
   connector,
   activeChainId,
-  isActivating,
   isActive,
   error,
   setError,
+  style,
+  className,
+  children,
 }: {
   connector: WalletConnectV2
   activeChainId: ReturnType<Web3ReactHooks['useChainId']>
@@ -17,6 +19,9 @@ export function ConnectWithSelect({
   isActive: ReturnType<Web3ReactHooks['useIsActive']>
   error: Error | undefined
   setError: (error: any | undefined) => void
+  style?: React.CSSProperties
+  className?: string
+  children?: React.ReactNode
 }) {
   const [desiredChainId, setDesiredChainId] = useState<number>()
 
@@ -32,47 +37,33 @@ export function ConnectWithSelect({
   }, [desiredChainId, activeChainId])
 
   const switchChain = useCallback(
-    async (desiredChainId: number | undefined) => {
+    async (desiredChainId = 1) => {
       // if (desiredChainId) {
       setDesiredChainId(desiredChainId)
 
       try {
-        if (
-          // If we're already connected to the desired chain, return
-          desiredChainId === activeChainId ||
-          // If they want to connect to the default chain and we're already connected, return
-          (desiredChainId === -1 && activeChainId !== undefined)
-        ) {
-          setError(undefined)
-          return
-        }
-
-        if (connector instanceof WalletConnectV2) {
-          await connector.activate(desiredChainId)
-        }
-
+        await connector.activate(desiredChainId)
         setError(undefined)
       } catch (error: any) {
         setError(error)
       }
       // }
     },
-    [connector, activeChainId, setError],
+    [connector, setError],
   )
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <div style={{ marginBottom: '1rem' }} />
+    <>
       {isActive ? (
         error ? (
           <button onClick={() => switchChain(desiredChainId)}>Try again?</button>
         ) : (
           <button
-            onClick={() => {
+            onClick={async () => {
               if (connector?.deactivate) {
-                void connector.deactivate()
+                await connector.deactivate()
               } else {
-                void connector.resetState()
+                await connector.resetState()
               }
               setDesiredChainId(undefined)
             }}
@@ -81,10 +72,10 @@ export function ConnectWithSelect({
           </button>
         )
       ) : (
-        <button onClick={() => switchChain(1)} disabled={isActivating}>
-          {error ? 'Try again?' : 'Connect'}
+        <button onClick={() => switchChain(1)} style={style} className={className}>
+          {children}
         </button>
       )}
-    </div>
+    </>
   )
 }

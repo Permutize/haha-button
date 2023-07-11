@@ -1,31 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { URI_AVAILABLE } from '@web3-react/walletconnect-v2'
-import { MAINNET_CHAINS } from './chains'
-import { hooks, walletConnectV2 } from './connector'
-import { ConnectWithSelect } from './ConnectWithSelect'
+// import { MAINNET_CHAINS } from './chains'
+import { walletConnectV2, hooks } from './connector'
+// import { ConnectWithSelect } from './ConnectWithSelect'
+// const CHAIN_IDS = Object.keys(MAINNET_CHAINS).map(Number)
 
-const CHAIN_IDS = Object.keys(MAINNET_CHAINS).map(Number)
+const { useIsActive } = hooks
 
-const { useChainId, useAccounts, useIsActivating, useIsActive, useProvider } = hooks
+// type HahaProps = {}
 
-type HahaProps = {
-  onConnect: (accounts: string[], provider: any) => void
-}
-
-export default function HahaButton(props: HahaProps) {
-  const { onConnect } = props
-
-  const chainId = useChainId()
-  const accounts = useAccounts()
-  const isActivating = useIsActivating()
+export default function HahaModal() {
+  // const chainId = useChainId()
+  // const accounts = useAccounts()
+  // const isActivating = useIsActivating()
 
   const isActive = useIsActive()
 
-  const provider = useProvider()
+  // const provider = useProvider()
 
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false)
   const [wcUri, setWcUri] = useState<string>('')
-  const [error, setError] = useState<Error | undefined>(undefined)
+  // const [error, setError] = useState<Error | undefined>(undefined)
 
   // log URI when available
   useEffect(() => {
@@ -44,11 +39,17 @@ export default function HahaButton(props: HahaProps) {
   }, [])
 
   useEffect(() => {
-    console.log({ accounts, provider })
-    if (accounts && provider && onConnect) {
-      onConnect(accounts, provider)
+    if (isActive) {
+      setIsShowDialog(false)
     }
-  }, [accounts, provider, onConnect])
+  }, [isActive])
+
+  // useEffect(() => {
+  //   console.log({ accounts, provider })
+  //   if (accounts && provider && onConnect) {
+  //     onConnect(accounts, provider)
+  //   }
+  // }, [accounts, provider, onConnect])
 
   return (
     <>
@@ -58,7 +59,7 @@ export default function HahaButton(props: HahaProps) {
             <div>
                 isActive: {isActive ? "true" : "false"}
             </div> */}
-      <ConnectWithSelect
+      {/* <ConnectWithSelect
         connector={walletConnectV2}
         activeChainId={chainId}
         chainIds={CHAIN_IDS}
@@ -66,7 +67,11 @@ export default function HahaButton(props: HahaProps) {
         isActive={isActive}
         error={error}
         setError={setError}
-      />
+        style={style}
+        className={className}
+      >
+        {children}
+      </ConnectWithSelect> */}
 
       {isShowDialog && (
         <div style={styles.modalRoot}>

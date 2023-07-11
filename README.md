@@ -9,13 +9,13 @@
 ## Installation:
 
 ```bash
-npm i haha-connect
+npm i haha-connect @web3-react/walletconnect-v2 @web3-react/core @walletconnect/ethereum-provider
 ```
 
 or
 
 ```bash
-yarn add haha-connect
+yarn add haha-connect @web3-react/walletconnect-v2 @web3-react/core @walletconnect/ethereum-provider
 ```
 
 ## Usage :
@@ -23,24 +23,49 @@ yarn add haha-connect
 Add `HahaButton` to your component:
 
 ```js
-import React from 'react';
-import { HahaButton } from "haha-connect";
+import { useEffect } from "react";
+import "./App.css";
+import { HahaModal, connect, disconnect, logo, useAccounts, useIsActive, useProvider } from "haha-connect";
 
-export default function App() {
-    return (
-        <div>
-            <HahaButton onConnect={(accounts, provider) => {
-                //Handle event when connection successfull
-                console.log({ accounts, provider });
-            }} />
-        </div>
-    );
+function App() {
+  const isActive = useIsActive(); // true if connected
+  const accounts = useAccounts(); // array of wallet address
+  const provider = useProvider(); // ethers provider object
+
+  useEffect(() => {
+    console.log({ isActive, accounts, provider });
+  }, [isActive, accounts, provider]);
+
+  return (
+    <div className="App">
+      {isActive ? (
+        <button onClick={async () => {
+          await disconnect();
+        }}>Disconnect</button>
+      ) : (
+        <button onClick={async () => {
+          await connect();
+        }}>
+            <img src={logo} />
+            Connect
+        </button>
+      )}
+
+      <HahaModal />
+    </div>
+  );
 }
+
+export default App;
 
 ```
 
+## Limitation :
+
+Currently supports ethereum mainnet (chain id: 1)
+
 [npm-url]: https://www.npmjs.com/package/haha-connect
 [npm-image]: https://img.shields.io/npm/v/haha-connect
-[github-license]: https://img.shields.io/github/license/gapon2401/my-react-typescript-package
-[github-license-url]: https://github.com/gapon2401/my-react-typescript-package/blob/master/LICENSE
-[npm-typescript]: https://img.shields.io/npm/types/my-react-typescript-package
+[github-license]: https://img.shields.io/github/license/Permutize/haha-connect
+[github-license-url]: https://github.com/Permutize/haha-connect/blob/master/LICENSE
+[npm-typescript]: https://img.shields.io/npm/types/haha-connect
