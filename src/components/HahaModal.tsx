@@ -4,6 +4,11 @@ import { walletConnectV2, hooks } from './connector'
 
 const { useIsActive } = hooks
 
+const postMessage = (message: any) => {
+  // @ts-ignore
+  window?.ReactNativeWebView?.postMessage(JSON.stringify(message))
+}
+
 export default function HahaModal() {
   const isActive = useIsActive()
 
@@ -13,8 +18,16 @@ export default function HahaModal() {
   // log URI when available
   useEffect(() => {
     walletConnectV2.events.on(URI_AVAILABLE, (uri: string) => {
-      setWcUri(uri)
-      setIsShowDialog(true)
+      // @ts-ignore
+      if (window.sendWalletConnectQR !== undefined) {
+        postMessage({
+          type: 'walletconnect_haha',
+          uri,
+        })
+      } else {
+        setWcUri(uri)
+        setIsShowDialog(true)
+      }
     })
   }, [])
 
