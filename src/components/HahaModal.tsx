@@ -34,7 +34,7 @@ export default function HahaModal() {
   // attempt to connect eagerly on mount
   useEffect(() => {
     walletConnectV2.connectEagerly().catch((error) => {
-      console.error('Failed to connect eagerly to walletconnect', error)
+      console.log('Failed to connect eagerly to walletconnect', error)
     })
   }, [])
 
@@ -49,9 +49,13 @@ export default function HahaModal() {
       {isShowDialog && (
         <div style={styles.modalRoot}>
           <div style={styles.modalContent}>
-            <img src={'https://chart.googleapis.com/chart?cht=qr&chl=' + encodeURIComponent(wcUri) + '&chs=300x300'} />
+            <div style={styles.getRewards}>Please scan this qrcode with your wallet app.</div>
+            <img
+              src={'https://chart.googleapis.com/chart?cht=qr&chl=' + encodeURIComponent(wcUri) + '&chs=300x300'}
+              style={styles.qrImage}
+            />
 
-            <div style={{ textAlign: 'center' }}>Get rewards on every transactions.</div>
+            <div style={styles.getRewards}>Get rewards on every transaction.</div>
 
             <div style={styles.row}>
               <a
@@ -72,17 +76,16 @@ export default function HahaModal() {
               </a>
             </div>
 
-            <a href='https://haha.me/' style={styles.linkText}>
-              <img src='https://www.haha.me/images/logo-seo.png' style={styles.imageBox} />
-              <br />
-              https://haha.me
+            <a href='https://www.haha.me/' style={styles.linkText} target='_blank' rel='noreferrer'>
+              <div style={styles.linkTextUnderline}>Learn More</div>
             </a>
 
             <a
               href='#'
               style={styles.closeButton}
-              onClick={() => {
+              onClick={(e) => {
                 setIsShowDialog(false)
+                e.preventDefault()
               }}
             >
               <img src='https://www.haha.me/images/buttons/close.png' style={styles.closeButtonImg} />
@@ -94,7 +97,7 @@ export default function HahaModal() {
   )
 }
 
-const styles: any = {
+const styles: { [key: string]: React.CSSProperties } = {
   modalRoot: {
     position: 'fixed',
     top: 0,
@@ -115,6 +118,12 @@ const styles: any = {
     borderRadius: 10,
     padding: 20,
     position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  getRewards: {
+    textAlign: 'center',
   },
   row: {
     display: 'flex',
@@ -125,6 +134,10 @@ const styles: any = {
   },
   imgButton: {
     margin: '0 5px',
+  },
+  qrImage: {
+    width: 264,
+    height: 264,
   },
   image: {
     width: 156 * 0.7,
@@ -138,7 +151,15 @@ const styles: any = {
     textAlign: 'center',
     color: '#000',
     marginTop: 10,
-    display: 'block',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 12,
+  },
+  linkTextUnderline: {
+    textDecorationLine: 'underline',
+    fontWeight: 'bold',
   },
   closeButton: {
     position: 'absolute',
