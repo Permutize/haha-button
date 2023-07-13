@@ -44,16 +44,36 @@ export default function HahaModal() {
     }
   }, [isActive])
 
+  useEffect(() => {
+    const eventEscape = () => {
+      document.addEventListener(
+        'keydown',
+        (event) => {
+          if (event.key === 'Escape') {
+            setIsShowDialog(false)
+          }
+        },
+        false,
+      )
+    }
+
+    eventEscape()
+  }, [])
+
   return (
     <>
       {isShowDialog && (
         <div style={styles.modalRoot}>
           <div style={styles.modalContent}>
-            <div style={styles.getRewards}>Please scan this qrcode with your wallet app.</div>
+            <div style={styles.getRewards}>Scan this with the HaHa Wallet app to connect.</div>
             <img
               src={'https://chart.googleapis.com/chart?cht=qr&chl=' + encodeURIComponent(wcUri) + '&chs=300x300'}
               style={styles.qrImage}
             />
+
+            <a href='https://www.haha.me/' style={styles.linkText} target='_blank' rel='noreferrer'>
+              <div style={styles.linkTextUnderline}>Learn More</div>
+            </a>
 
             <div style={styles.getRewards}>Get rewards on every transaction.</div>
 
@@ -75,10 +95,6 @@ export default function HahaModal() {
                 <img src='https://haha.me/images/download-android.png' style={styles.image} alt='Download Android' />
               </a>
             </div>
-
-            <a href='https://www.haha.me/' style={styles.linkText} target='_blank' rel='noreferrer'>
-              <div style={styles.linkTextUnderline}>Learn More</div>
-            </a>
 
             <a
               href='#'
@@ -121,6 +137,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   getRewards: {
     textAlign: 'center',
@@ -150,12 +167,12 @@ const styles: { [key: string]: React.CSSProperties } = {
   linkText: {
     textAlign: 'center',
     color: '#000',
-    marginTop: 10,
+    marginBottom: 10,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: 12,
+    fontSize: 14,
   },
   linkTextUnderline: {
     textDecorationLine: 'underline',

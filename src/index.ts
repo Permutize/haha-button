@@ -1,4 +1,4 @@
-import HahaModal from './components/HahaModal'
+import { HahaButton, HahaModal } from './components'
 import { hooks, walletConnectV2 as connector } from './components/connector'
 const { useChainId, useAccounts, useIsActivating, useIsActive, useProvider } = hooks
 
@@ -16,4 +16,15 @@ const disconnect = async () => {
 
 const logo = 'https://www.haha.me/images/logo-transparent.png'
 
-export { HahaModal, connect, disconnect, logo, useChainId, useAccounts, useIsActivating, useIsActive, useProvider }
+export {
+  HahaModal,
+  HahaButton,
+  connect,
+  disconnect,
+  logo,
+  useChainId,
+  useAccounts,
+  useIsActivating,
+  useIsActive,
+  useProvider,
+}

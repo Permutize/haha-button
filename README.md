@@ -22,7 +22,7 @@ yarn add haha-connect @web3-react/walletconnect-v2 @web3-react/core @walletconne
 
 ```js
 import { useEffect } from "react";
-import { HahaModal, connect, disconnect, logo, useAccounts, useIsActive, useProvider } from "haha-connect";
+import { HahaModal, HahaButton, connect, disconnect, logo, useAccounts, useIsActive, useProvider } from "haha-connect";
 
 function App() {
   const isActive = useIsActive(); // true if connected
@@ -40,12 +40,9 @@ function App() {
           await disconnect();
         }}>Disconnect</button>
       ) : (
-        <button onClick={async () => {
-          await connect();
-        }}>
-            <img src={logo} style={{ width: 20, height: 20 }}/>
-            Connect
-        </button>
+        <HahaButton 
+          style={{ backgroundColor: '#000', color: '#fff' }}
+        />
       )}
 
       <HahaModal />
