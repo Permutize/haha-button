@@ -30,7 +30,7 @@ const svg = (
 )
 
 interface HahaButtonProps extends React.ComponentPropsWithoutRef<'button'> {
-  label: string
+  label?: string
 }
 
 export default function HahaButton(props: HahaButtonProps) {

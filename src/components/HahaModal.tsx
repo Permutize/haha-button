@@ -9,7 +9,13 @@ const postMessage = (message: any) => {
   window?.ReactNativeWebView?.postMessage(JSON.stringify(message))
 }
 
-export default function HahaModal() {
+type HahaModalProps = {
+  darkModeEnabled?: boolean
+}
+
+export default function HahaModal(props: HahaModalProps) {
+  const { darkModeEnabled = false } = props
+
   const isActive = useIsActive()
 
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false)
@@ -60,18 +66,34 @@ export default function HahaModal() {
     eventEscape()
   }, [])
 
+  const modalContent = {
+    ...styles.modalContent,
+    backgroundColor: darkModeEnabled ? '#000' : '#fff',
+    color: darkModeEnabled ? '#fff' : '#000',
+  }
+
+  const linkText = {
+    ...styles.linkText,
+    color: darkModeEnabled ? '#fff' : '#000',
+  }
+
   return (
     <>
       {isShowDialog && (
         <div style={styles.modalRoot}>
-          <div style={styles.modalContent}>
+          <div style={modalContent}>
             <div style={styles.getRewards}>Scan this with the HaHa Wallet app to connect.</div>
             <img
-              src={'https://chart.googleapis.com/chart?cht=qr&chl=' + encodeURIComponent(wcUri) + '&chs=300x300'}
+              src={
+                'https://www.haha.me/api/qrcode?content=' +
+                encodeURIComponent(wcUri) +
+                '&dark=' +
+                (darkModeEnabled ? '1' : '0')
+              }
               style={styles.qrImage}
             />
 
-            <a href='https://www.haha.me/' style={styles.linkText} target='_blank' rel='noreferrer'>
+            <a href='https://www.haha.me/' style={linkText} target='_blank' rel='noreferrer'>
               <div style={styles.linkTextUnderline}>Learn More</div>
             </a>
 
@@ -104,7 +126,12 @@ export default function HahaModal() {
                 e.preventDefault()
               }}
             >
-              <img src='https://www.haha.me/images/buttons/close.png' style={styles.closeButtonImg} />
+              {darkModeEnabled && (
+                <img src='https://www.haha.me/images/buttons/close-dark.png' style={styles.closeButtonImg} />
+              )}
+              {!darkModeEnabled && (
+                <img src='https://www.haha.me/images/buttons/close.png' style={styles.closeButtonImg} />
+              )}
             </a>
           </div>
         </div>
@@ -155,6 +182,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   qrImage: {
     width: 264,
     height: 264,
+    marginTop: 20,
   },
   image: {
     width: 156 * 0.7,
@@ -166,13 +194,13 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   linkText: {
     textAlign: 'center',
-    color: '#000',
     marginBottom: 10,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: 14,
+    marginTop: 20,
   },
   linkTextUnderline: {
     textDecorationLine: 'underline',
