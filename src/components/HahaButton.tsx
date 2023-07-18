@@ -29,9 +29,13 @@ const svg = (
   </svg>
 )
 
-export default function HahaButton(props: React.ComponentPropsWithoutRef<'button'>) {
+interface HahaButtonProps extends React.ComponentPropsWithoutRef<'button'> {
+  label: string
+}
+
+export default function HahaButton(props: HahaButtonProps) {
   // eslint-disable-next-line react/prop-types
-  const { style, ...rest } = props
+  const { style, label = 'HaHa Wallet - Rewards on Every Transaction', ...rest } = props
 
   const newStyle = {
     ...styles.button,
@@ -52,7 +56,7 @@ export default function HahaButton(props: React.ComponentPropsWithoutRef<'button
           {/* <img src='https://www.haha.me/images/logo-transparent.png' style={styles.image} /> */}
           {svg}
         </div>
-        HaHa Wallet - Rewards on Every Transaction
+        {label}
       </div>
     </button>
   )

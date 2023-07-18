@@ -18,7 +18,7 @@ or
 yarn add haha-connect @web3-react/walletconnect-v2 @web3-react/core @walletconnect/ethereum-provider
 ```
 
-## Usage :
+## Usage 1:
 
 ```js
 import { useEffect } from "react";
@@ -41,8 +41,46 @@ function App() {
         }}>Disconnect</button>
       ) : (
         <HahaButton 
+          //all props is optional
+          label="Connect with HaHa"
           style={{ backgroundColor: '#000', color: '#fff' }}
         />
+      )}
+
+      <HahaModal />
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+## Usage 2 (plain button):
+
+```js
+import { useEffect } from "react";
+import { HahaModal, HahaButton, connect, disconnect, logo, useAccounts, useIsActive, useProvider } from "haha-connect";
+
+function App() {
+  const isActive = useIsActive(); // true if connected
+  const accounts = useAccounts(); // array of wallet address
+  const provider = useProvider(); // ethers provider object
+
+  useEffect(() => {
+    console.log({ isActive, accounts, provider });
+  }, [isActive, accounts, provider]);
+
+  return (
+    <div>
+      {isActive ? (
+        <button onClick={async () => {
+          await disconnect();
+        }}>Disconnect</button>
+      ) : (
+        <button onClick={async () => {
+          await connect();
+        }}>Connect</button>
       )}
 
       <HahaModal />
