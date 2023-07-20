@@ -9,6 +9,16 @@ const postMessage = (message: any) => {
   window?.ReactNativeWebView?.postMessage(JSON.stringify(message))
 }
 
+const isMobile = () => {
+  let hasTouchScreen = false
+
+  if ('maxTouchPoints' in navigator) {
+    hasTouchScreen = navigator.maxTouchPoints > 0
+  }
+
+  return hasTouchScreen
+}
+
 type HahaModalProps = {
   darkModeEnabled?: boolean
 }
@@ -31,15 +41,20 @@ export default function HahaModal(props: HahaModalProps) {
           uri,
         })
       } else {
-        setWcUri(uri)
-        setIsShowDialog(true)
+        if (isMobile()) {
+          // @ts-ignore
+          window.location = 'haha://opensea?link=' + encodeURIComponent(window.location)
+        } else {
+          setWcUri(uri)
+          setIsShowDialog(true)
+        }
       }
     })
   }, [])
 
   // attempt to connect eagerly on mount
   useEffect(() => {
-    walletConnectV2.connectEagerly().catch((error) => {
+    walletConnectV2.connectEagerly().catch((error: any) => {
       console.log('Failed to connect eagerly to walletconnect', error)
     })
   }, [])
