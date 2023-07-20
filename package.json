@@ -1,6 +1,6 @@
 {
   "name": "haha-connect",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Haha button to connect to walletconnect",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

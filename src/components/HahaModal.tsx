@@ -41,12 +41,12 @@ export default function HahaModal(props: HahaModalProps) {
           uri,
         })
       } else {
+        setWcUri(uri)
+        setIsShowDialog(true)
+
         if (isMobile()) {
           // @ts-ignore
           window.location = 'haha://opensea?link=' + encodeURIComponent(window.location)
-        } else {
-          setWcUri(uri)
-          setIsShowDialog(true)
         }
       }
     })
