@@ -1,5 +1,4 @@
-import React from 'react'
-import { walletConnectV2 as connector } from './connector'
+import React, { useMemo } from 'react'
 
 const svg = (
   <svg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -31,31 +30,24 @@ const svg = (
 
 interface HahaButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   label?: string
+  onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
 export default function HahaButton(props: HahaButtonProps) {
   // eslint-disable-next-line react/prop-types
-  const { style, label = 'HaHa Wallet - Rewards on Every Transaction', ...rest } = props
+  const { style, label = 'HaHa Wallet - Rewards on Every Transaction', onClick, ...rest } = props
 
-  const newStyle = {
-    ...styles.button,
-    ...style,
-  }
+  const newStyle = useMemo(() => {
+    return {
+      ...styles.button,
+      ...style,
+    }
+  }, [style])
 
   return (
-    <button
-      style={newStyle}
-      {...rest}
-      onClick={async (e) => {
-        await connector.activate(1)
-        e.preventDefault()
-      }}
-    >
+    <button style={newStyle} {...rest} onClick={onClick}>
       <div style={styles.content}>
-        <div style={styles.imageWrapper}>
-          {/* <img src='https://www.haha.me/images/logo-transparent.png' style={styles.image} /> */}
-          {svg}
-        </div>
+        <div style={styles.imageWrapper}>{svg}</div>
         {label}
       </div>
     </button>
