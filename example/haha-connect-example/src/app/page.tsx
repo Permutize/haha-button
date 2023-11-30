@@ -1,32 +1,11 @@
-# haha-connect
-
-[![NPM version][npm-image]][npm-url]
-![npm-typescript]
-[![License][github-license]][github-license-url]
-
-## Installation:
-
-```bash
-npm i haha-connect
-```
-
-or
-
-```bash
-yarn add haha-connect
-```
-
-## Usage:
-
-```js
 'use client'
 
-import { HahaModal, HahaButton, connect, disconnect, initialize } from 'haha-connect'
+import { HahaModal, HahaButton, connect, disconnect, initialize } from '../../../../src/index'
 import { useMemo } from 'react'
 
 export default function Home() {
   const hahaConnector = useMemo(() => {
-    return initialize('walletconnect_project_id')
+    return initialize('0d0bfc6b55700ea8704a228094b6e3c2')
   }, [])
 
   const isActive = hahaConnector.hooks.useIsActive()
@@ -58,14 +37,3 @@ export default function Home() {
     </main>
   )
 }
-```
-
-## Limitation :
-
-Currently supports ethereum mainnet (chain id: 1) and polygon (chain id: 137)
-
-[npm-url]: https://www.npmjs.com/package/haha-connect
-[npm-image]: https://img.shields.io/npm/v/haha-connect
-[github-license]: https://img.shields.io/github/license/Permutize/haha-connect
-[github-license-url]: https://github.com/Permutize/haha-connect/blob/master/LICENSE
-[npm-typescript]: https://img.shields.io/npm/types/haha-connect

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { URI_AVAILABLE } from '@web3-react/walletconnect-v2'
-import { walletConnectV2, hooks } from './connector'
-
-const { useIsActive } = hooks
+import { HaHaConnector } from './type'
 
 const postMessage = (message: any) => {
   // @ts-ignore
@@ -21,19 +19,28 @@ const isMobile = () => {
 
 type HahaModalProps = {
   darkModeEnabled?: boolean
+  hahaConnector: HaHaConnector
 }
 
 export default function HahaModal(props: HahaModalProps) {
-  const { darkModeEnabled = false } = props
-
-  const isActive = useIsActive()
+  const {
+    darkModeEnabled = false,
+    hahaConnector: { connector, hooks },
+  } = props
 
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false)
   const [wcUri, setWcUri] = useState<string>('')
 
-  // log URI when available
+  const isActive = hooks.useIsActive()
+
   useEffect(() => {
-    walletConnectV2.events.on(URI_AVAILABLE, (uri: string) => {
+    // attempt to connect eagerly on mount
+    connector.connectEagerly().catch((error: any) => {
+      console.log('Failed to connect eagerly to walletconnect', error.message)
+    })
+
+    // log URI when available
+    connector.events.on(URI_AVAILABLE, (uri: string) => {
       // @ts-ignore
       if (window.sendWalletConnectQR !== undefined) {
         postMessage({
@@ -45,19 +52,20 @@ export default function HahaModal(props: HahaModalProps) {
         setIsShowDialog(true)
 
         if (isMobile()) {
+          const now = new Date().valueOf()
+          setTimeout(function () {
+            if (new Date().valueOf() - now > 100) return
+
+            // @ts-ignore
+            window.location = 'https://join.haha.me/haha-connect'
+          }, 50)
+
           // @ts-ignore
-          window.location = 'haha://opensea?link=' + encodeURIComponent(window.location)
+          window.location = 'haha://browser?link=' + encodeURIComponent(window.location)
         }
       }
     })
-  }, [])
-
-  // attempt to connect eagerly on mount
-  useEffect(() => {
-    walletConnectV2.connectEagerly().catch((error: any) => {
-      console.log('Failed to connect eagerly to walletconnect', error)
-    })
-  }, [])
+  }, [connector])
 
   useEffect(() => {
     if (isActive) {
@@ -172,7 +180,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   modalContent: {
     background: '#fff',
     width: 350,
-    height: 450,
+    height: 500,
     borderRadius: 10,
     padding: 20,
     position: 'relative',
@@ -183,6 +191,8 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
   getRewards: {
     textAlign: 'center',
+    marginLeft: 25,
+    marginRight: 25,
   },
   row: {
     display: 'flex',
@@ -227,7 +237,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     right: 10,
   },
   closeButtonImg: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
   },
 }
