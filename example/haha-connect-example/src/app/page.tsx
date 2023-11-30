@@ -15,13 +15,18 @@ export default function Home() {
       <div>
         {isActive ? (
           <HahaButton
-            onClick={() => disconnect(hahaConnector)}
+            onClick={() => {
+              disconnect(hahaConnector)
+            }}
             label='Disconnect'
             style={{ backgroundColor: '#000', color: '#fff' }}
           />
         ) : (
           <HahaButton
-            onClick={() => connect(hahaConnector, 1)}
+            onClick={(e) => {
+              connect(hahaConnector, 1)
+              e.preventDefault()
+            }}
             label='Connect with HaHa'
             style={{ backgroundColor: '#000', color: '#fff' }}
           />
