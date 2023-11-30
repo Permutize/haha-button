@@ -4,8 +4,6 @@
 ![npm-typescript]
 [![License][github-license]][github-license-url]
 
-
-
 ## Installation:
 
 ```bash
@@ -23,7 +21,7 @@ yarn add haha-connect
 ```js
 'use client'
 
-import { HahaModal, HahaButton, connect, disconnect, initialize } from '../../../../src/index'
+import { HahaModal, HahaButton, connect, disconnect, initialize } from 'haha-connect'
 import { useMemo } from 'react'
 
 export default function Home() {
@@ -60,7 +58,6 @@ export default function Home() {
     </main>
   )
 }
-
 ```
 
 ## Limitation :
