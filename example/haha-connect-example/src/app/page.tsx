@@ -1,7 +1,7 @@
 'use client'
 
 import { HahaModal, HahaButton, connect, disconnect, initialize } from '../../../../src/index'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 
 export default function Home() {
   const hahaConnector = useMemo(() => {

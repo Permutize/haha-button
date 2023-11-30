@@ -9,92 +9,63 @@
 ## Installation:
 
 ```bash
-npm i haha-connect @web3-react/walletconnect-v2 @web3-react/core @walletconnect/ethereum-provider
+npm i haha-connect
 ```
 
 or
 
 ```bash
-yarn add haha-connect @web3-react/walletconnect-v2 @web3-react/core @walletconnect/ethereum-provider
+yarn add haha-connect
 ```
 
-## Usage 1:
+## Usage:
 
 ```js
-import { useEffect } from "react";
-import { HahaModal, HahaButton, connect, disconnect, logo, useAccounts, useIsActive, useProvider } from "haha-connect";
+'use client'
 
-function App() {
-  const isActive = useIsActive(); // true if connected
-  const accounts = useAccounts(); // array of wallet address
-  const provider = useProvider(); // ethers provider object
+import { HahaModal, HahaButton, connect, disconnect, initialize } from '../../../../src/index'
+import { useMemo } from 'react'
 
-  useEffect(() => {
-    console.log({ isActive, accounts, provider });
-  }, [isActive, accounts, provider]);
+export default function Home() {
+  const hahaConnector = useMemo(() => {
+    return initialize('walletconnect_project_id')
+  }, [])
 
-  return (
-    <div>
-      {isActive ? (
-        <button onClick={async () => {
-          await disconnect();
-        }}>Disconnect</button>
-      ) : (
-        <HahaButton 
-          //all props is optional
-          label="Connect with HaHa"
-          style={{ backgroundColor: '#000', color: '#fff' }}
-        />
-      )}
-
-      <HahaModal />
-    </div>
-  );
-}
-
-export default App;
-
-```
-
-## Usage 2 (plain button):
-
-```js
-import { useEffect } from "react";
-import { HahaModal, HahaButton, connect, disconnect, logo, useAccounts, useIsActive, useProvider } from "haha-connect";
-
-function App() {
-  const isActive = useIsActive(); // true if connected
-  const accounts = useAccounts(); // array of wallet address
-  const provider = useProvider(); // ethers provider object
-
-  useEffect(() => {
-    console.log({ isActive, accounts, provider });
-  }, [isActive, accounts, provider]);
+  const isActive = hahaConnector.hooks.useIsActive()
 
   return (
-    <div>
-      {isActive ? (
-        <button onClick={async () => {
-          await disconnect();
-        }}>Disconnect</button>
-      ) : (
-        <button onClick={async () => {
-          await connect();
-        }}>Connect</button>
-      )}
+    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
+      <div>
+        {isActive ? (
+          <HahaButton
+            onClick={() => {
+              disconnect(hahaConnector)
+            }}
+            label='Disconnect'
+            style={{ backgroundColor: '#000', color: '#fff' }}
+          />
+        ) : (
+          <HahaButton
+            onClick={(e) => {
+              connect(hahaConnector, 1)
+              e.preventDefault()
+            }}
+            label='Connect with HaHa'
+            style={{ backgroundColor: '#000', color: '#fff' }}
+          />
+        )}
 
-      <HahaModal />
-    </div>
-  );
+        <HahaModal hahaConnector={hahaConnector} />
+      </div>
+    </main>
+  )
 }
-
-export default App;
 
 ```
 
 ## Limitation :
 
-Currently supports ethereum mainnet (chain id: 1)
+Currently supports ethereum mainnet (chain id: 1) and polygon (chain id: 137)
 
 [npm-url]: https://www.npmjs.com/package/haha-connect
 [npm-image]: https://img.shields.io/npm/v/haha-connect
