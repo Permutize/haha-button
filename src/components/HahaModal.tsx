@@ -52,13 +52,13 @@ export default function HahaModal(props: HahaModalProps) {
         setIsShowDialog(true)
 
         if (isMobile()) {
-          const now = new Date().valueOf()
-          setTimeout(function () {
-            if (new Date().valueOf() - now > 100) return
+          // const now = new Date().valueOf()
+          // setTimeout(function () {
+          //   if (new Date().valueOf() - now > 100) return
 
-            // @ts-ignore
-            window.location = 'https://join.haha.me/haha-connect'
-          }, 50)
+          //   // @ts-ignore
+          //   window.location = 'https://join.haha.me/haha-connect'
+          // }, 50)
 
           // @ts-ignore
           window.location = 'haha://browser?link=' + encodeURIComponent(window.location)
